@@ -1,7 +1,16 @@
 from app.schemas.patient import PatientCreate
-from fastapi import HTTPException
+from fastapi import HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from app.db.models.patient import Patient
+import cloudinary
+from cloudinary.uploader import upload
+from app.core.config import settings
+from fastapi.responses import JSONResponse
+
+cloudinary.config(
+    cloud_name = settings.CLOUDINARY_CLOUD_NAME,
+    api_key = settings.CLOUDINARY_API_KEY,
+    api_secret= settings.CLOUDINARY_API_SECRET)
 
 def create(patient: PatientCreate, db: Session):
     db_patient = db.query(Patient).filter(Patient.email == patient.email).first()
@@ -24,3 +33,10 @@ def create(patient: PatientCreate, db: Session):
 def get(db: Session):
     patients = db.query(Patient).all()
     return patients
+
+def upload_document_photo(file: UploadFile = File(...)):
+    try:
+        result = upload(file.file)
+        return JSONResponse(content= {"url": result["secure_url"]})
+    except Exception as e:
+        raise HTTPException(status_code=400, detail={e})

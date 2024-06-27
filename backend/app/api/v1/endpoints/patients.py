@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.schemas.patient import PatientCreate
-
-from app.services.patients import create, get
+from app.services.patients import create, get, upload_document_photo
 
 router = APIRouter()
 
@@ -28,3 +27,8 @@ def create_patient(
 def get_patients(db: Session = Depends(get_db)):
     patients= get(db)
     return patients
+
+@router.post("/upload-photo")
+async def upload_photo(file: UploadFile = File(...)):
+    url = upload_document_photo(file)
+    return url
