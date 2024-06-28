@@ -1,5 +1,6 @@
 from app.db.session import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
+import datetime
 
 
 class Patient(Base):
@@ -12,3 +13,4 @@ class Patient(Base):
     phone_country_code = Column(String(5), nullable=False)
     phone_number = Column(String(20), nullable=False)
     document_photo = Column(String(255), nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.now)

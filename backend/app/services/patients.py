@@ -6,6 +6,9 @@ import cloudinary
 from cloudinary.uploader import upload
 from app.core.config import settings
 from fastapi.responses import JSONResponse
+import smtplib
+from datetime import datetime
+
 
 cloudinary.config(
     cloud_name = settings.CLOUDINARY_CLOUD_NAME,
@@ -32,6 +35,11 @@ def create(patient: PatientCreate, db: Session):
 
 def get(db: Session):
     patients = db.query(Patient).all()
+    return patients
+
+def get_since(db: Session, since: int):
+    since_datetime = datetime.fromtimestamp(since / 1000.0)
+    patients = db.query(Patient).filter(Patient.created_at >= since_datetime).all()
     return patients
 
 def upload_document_photo(file: UploadFile = File(...)):
