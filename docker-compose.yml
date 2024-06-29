@@ -7,7 +7,7 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: patients
     ports:
-      - "3306:3306"
+      - "3311:3311"
     volumes:
       - db_data:/var/lib/mysql
 
@@ -21,6 +21,17 @@ services:
       - db
     environment:
       - DATABASE_URL=mysql://root:example@db/patients
+
+  frontend:
+    build: ./frontend
+    stdin_open: true
+    ports:
+      - "5137:5137"
+    volumes:
+      - ./frontend:/src
+    depends_on:
+      - backend
+    network_mode: host
 
 volumes:
   db_data:
