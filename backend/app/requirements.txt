@@ -6,3 +6,6 @@ email-validator
 mysqlclient
 cloudinary
 python-dotenv
+resend
+fastapi-mail
+jinja2

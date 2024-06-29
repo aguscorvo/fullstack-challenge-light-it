@@ -1,4 +1,5 @@
 from app.schemas.patient import PatientCreate
+from app.templates.email import getTemplate
 from fastapi import HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from app.db.models.patient import Patient
@@ -6,9 +7,11 @@ import cloudinary
 from cloudinary.uploader import upload
 from app.core.config import settings
 from fastapi.responses import JSONResponse
+import resend
+from typing import Dict
 import smtplib
 from datetime import datetime
-
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 
 cloudinary.config(
     cloud_name = settings.CLOUDINARY_CLOUD_NAME,
@@ -48,3 +51,27 @@ def upload_document_photo(file: UploadFile = File(...)):
         return JSONResponse(content= {"url": result["secure_url"]})
     except Exception as e:
         raise HTTPException(status_code=400, detail={e})
+    
+conf = ConnectionConfig(
+    MAIL_USERNAME=settings.MAIL_USERNAME,
+    MAIL_PASSWORD=settings.MAIL_PASSWORD,
+    MAIL_FROM=settings.MAIL_FROM,
+    MAIL_PORT=settings.MAIL_PORT,
+    MAIL_SERVER=settings.MAIL_SERVER,
+    MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
+    MAIL_STARTTLS = True,
+    MAIL_SSL_TLS = False,
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS = True
+)
+    
+async def send_email(name: str, email:str):
+    message = MessageSchema(
+        subject="Successfully registered!",
+        recipients=[email],
+        body= getTemplate(name),
+        subtype=MessageType.html,
+    )
+    
+    fm = FastMail(conf)
+    await fm.send_message(message)

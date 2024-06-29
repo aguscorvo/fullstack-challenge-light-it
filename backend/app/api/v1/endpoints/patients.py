@@ -1,13 +1,18 @@
 from http.client import HTTPException
 from typing import Optional
-from fastapi import APIRouter, Depends, File, UploadFile, Query
+from fastapi import APIRouter, Depends, File, UploadFile, Query, BackgroundTasks
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.schemas.patient import PatientCreate
-from app.services.patients import create, get, get_since, upload_document_photo
+from app.services.patients import create, get, get_since, send_email, upload_document_photo
 from pydantic import BaseModel
 
 router = APIRouter()
+
+class EmailSchema(BaseModel):
+    recipient: str
+    subject: str
+    body: str
 
 def get_db():
     db = SessionLocal()
@@ -18,11 +23,11 @@ def get_db():
 
 @router.post("/", status_code=201)
 def create_patient(
-    patient: PatientCreate, db: Session = Depends(get_db)
-):
+    patient: PatientCreate, db: Session = Depends(get_db), background_tasks: BackgroundTasks = BackgroundTasks):
     new_patient = create(patient, db)
 
-    # TODO: send confirmation email
+    if(new_patient):
+        background_tasks.add_task(send_email, patient.first_name, patient.email,)
 
     return new_patient
 
