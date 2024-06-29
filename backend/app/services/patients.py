@@ -18,6 +18,21 @@ cloudinary.config(
     api_key = settings.CLOUDINARY_API_KEY,
     api_secret= settings.CLOUDINARY_API_SECRET)
 
+
+
+def startup_create(db: Session):
+    first_email = "ajuanperez@gmail.com"
+    db_patient = db.query(Patient).filter(Patient.email == first_email).first()
+    if(db_patient):
+        return
+
+    db.add_all([
+        Patient(first_name="Juan", last_name="Perez", email=first_email, phone_country_code="598", phone_number="099111222", document_photo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSkaSapNtWFwALz6Su_xYY9Kg1Z_1M86RDUA&s"),
+        Patient(first_name="Maria", last_name="Gonzalez", email="bmariagonzalez@gmail.com", phone_country_code="598", phone_number="099333444", document_photo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL2ro0tzrVjLJ8eC19aogh-ZiO6UzmRVYuTw&s"),
+        Patient(first_name="Luis", last_name="Rodriguez", email="cluisrodriguez@gmail.com", phone_country_code="598", phone_number="099555666", document_photo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB69DxHjl5PLatP_LLZk_zoJVM2bVOxAQ5vg&s"),
+    ])
+    db.commit()
+ 
 def create(patient: PatientCreate, db: Session):
     db_patient = db.query(Patient).filter(Patient.email == patient.email).first()
     if db_patient:

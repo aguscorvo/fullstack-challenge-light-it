@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, File, UploadFile, Query, BackgroundTasks
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.schemas.patient import PatientCreate
-from app.services.patients import create, get, get_since, send_email, upload_document_photo
+from app.services.patients import create, get, get_since, send_email, startup_create, upload_document_photo
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -20,6 +20,10 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@router.post("/startup-create", status_code=201)
+def startup(db: Session = Depends(get_db)):
+    startup_create(db)
 
 @router.post("/", status_code=201)
 def create_patient(
