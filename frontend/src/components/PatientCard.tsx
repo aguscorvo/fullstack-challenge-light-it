@@ -37,7 +37,7 @@ function Icons({ isExpanded }: IconsProps) {
 type PatientCardProps = {
   patient: Patient;
   isExpanded: boolean;
-  onToggle: (index: number, isExpanded: boolean) => void;
+  onToggle: () => void;
 };
 
 function PatientCard({ patient, isExpanded, onToggle }: PatientCardProps) {

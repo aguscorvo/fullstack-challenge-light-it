@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { FileWithPath, useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -105,9 +105,11 @@ const PatientForm = () => {
       setLoading(false);
       const error = err as AxiosError<Error>;
       if (error.response && error.response.status === 400) {
+        const errorDetail = (error.response.data as { detail?: string }).detail;
+
         Swal.fire({
           title: "Error!",
-          text: `${error.response.data.detail}. Please try again.`,
+          text: `${errorDetail}. Please try again.`,
           icon: "error",
           confirmButtonText: "Close",
         });
@@ -128,8 +130,8 @@ const PatientForm = () => {
   };
 
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
+    <li key={(file as FileWithPath).path}>
+      {(file as FileWithPath).path} - {file.size} bytes
       <ul>
         {errors.map((e) => (
           <li key={e.code}>{e.message}</li>

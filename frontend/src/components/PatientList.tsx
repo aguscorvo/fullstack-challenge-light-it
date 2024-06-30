@@ -7,7 +7,7 @@ import PatientCard from "./PatientCard";
 
 function PatientList() {
   const patients = usePatients();
-  const [expandedCards, setExpandedCards] = useState([]);
+  const [expandedCards, setExpandedCards] = useState<number[]>([]);
 
   const navigate = useNavigate();
 
