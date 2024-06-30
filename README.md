@@ -23,7 +23,9 @@ After logging into Mailtrap, go to: [Mailtrap Inboxes](https://mailtrap.io/inbox
 - Swagger: http://localhost:8000/docs
 - Frontend: http://localhost:5137/
 
-Stop the containers and remove them and images and volumes created by the previous command:
+5. Run the `/startup-create` endpoint to initialize the database with three sample patients.
+
+To stop the containers and remove them, along with images and volumes created by the previous command:
 
 ```sh
 docker-compose down

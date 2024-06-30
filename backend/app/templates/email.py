@@ -25,7 +25,7 @@ def getTemplate(name):
                 color: white;
             "
             >
-            Registration Confirmed!
+            Welcome to Our Platform!
             </h1>
             <div
             style="
@@ -39,8 +39,7 @@ def getTemplate(name):
             >
             <h3 style="margin-bottom: 100px; font-size: 24px">{name},</h3>
             <p style="margin-bottom: 30px">
-                We are glad to inform you that you have been successfully registered
-                to our platform.
+                We are pleased to inform you that you have been successfully registered on our platform.
             </p>
             </div>
         </div>

@@ -18,8 +18,6 @@ cloudinary.config(
     api_key = settings.CLOUDINARY_API_KEY,
     api_secret= settings.CLOUDINARY_API_SECRET)
 
-
-
 def startup_create(db: Session):
     first_email = "ajuanperez@gmail.com"
     db_patient = db.query(Patient).filter(Patient.email == first_email).first()
@@ -82,7 +80,7 @@ conf = ConnectionConfig(
     
 async def send_email(name: str, email:str):
     message = MessageSchema(
-        subject="Successfully registered!",
+        subject="Your Registration is Confirmed!",
         recipients=[email],
         body= getTemplate(name),
         subtype=MessageType.html,
