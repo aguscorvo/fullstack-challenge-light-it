@@ -9,7 +9,7 @@ import { checkForNewPatients } from "../services/patients";
 import type { CreatePatient, FormValues, Patient } from "../types";
 import { Button } from "./Button";
 import { ErrorMessage } from "./ErrorMessage";
-import FormHeader from "./FormHeader";
+import { Header } from "./Header";
 import InputField from "./InputField";
 import { Spinner } from "./Spinner";
 
@@ -142,7 +142,9 @@ const PatientForm = () => {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-r from-cyan-800 to-sky-800 p-8 flex flex-col">
-      <FormHeader onClick={patientsList} />
+      <Header>
+        <Button onClick={patientsList}>Back to Patients List</Button>
+      </Header>
       <div className="flex items-center justify-center">
         <div className="flex flex-col  items-center justify-center bg-gray-200 2xl:w-2/5 p-12 rounded shadow-lg">
           <form
@@ -257,7 +259,8 @@ const PatientForm = () => {
               <Button onClick={resetForm}>Reset Fields</Button>
               <div className="flex gap-4 items-center ">
                 {loading && <Spinner />}
-                <button
+                <Button
+                  primary
                   disabled={loading}
                   onClick={async () => {
                     setHasSubmitted(true);
@@ -266,11 +269,9 @@ const PatientForm = () => {
                       return;
                     }
                   }}
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm"
                 >
                   Submit
-                </button>
+                </Button>
               </div>
             </div>
           </form>

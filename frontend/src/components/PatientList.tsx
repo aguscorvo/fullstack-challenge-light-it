@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { usePatients } from "../hooks/usePatients";
 import type { Patient } from "../types";
 import { Button } from "./Button";
+import { Header } from "./Header";
 import PatientCard from "./PatientCard";
 
 function PatientList() {
@@ -27,12 +28,12 @@ function PatientList() {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-r from-cyan-800 to-sky-800 p-8">
-      <header className="flex gap-4 justify-end pb-8 sticky top-8">
+      <Header>
         {expandedCards.length > 0 && (
           <Button onClick={handleCollapseAll}>Collapse all</Button>
         )}
         <Button onClick={registerPatient}>Register a Patient</Button>
-      </header>
+      </Header>
 
       {patients && (
         <div className="flex flex-col w-full items-center justify-center">
